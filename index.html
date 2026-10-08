@@ -22,7 +22,7 @@
   h1, h2 { font-style: italic; font-weight: 400; line-height: 1.1; }
 
   /* Section 1: the garden */
-  .garden { min-height: 100svh; padding: 4rem 1rem; background: linear-gradient(var(--cream), var(--peach)); }
+  .garden { min-height: 100svh; padding: 4rem 1rem; background: linear-gradient(var(--cream), var(--peach)); display: grid; align-content: center; justify-items: center; }
   h1 { font-size: clamp(2.6rem, 9vw, 4.5rem); }
   .lede { max-width: 32ch; margin: .75rem auto 2.5rem; }
   #flowers { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: .5rem .15rem; max-width: 56rem; margin: 0 auto; }
@@ -51,9 +51,10 @@
 
   h2 { font-size: clamp(1.6rem, 5vw, 2.4rem); }
   #counter {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem .75rem; margin: 1.5rem 0;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem 0; margin: 1.5rem 0;
     font: .8rem/1.4 system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase;
   }
+  #counter div { flex: 0 0 33%; }
   #counter b { display: block; font: 400 clamp(2.4rem, 9vw, 3.6rem)/1.1 var(--serif); font-variant-numeric: tabular-nums; letter-spacing: 0; color: #ffb3c1; }
   .note { margin-top: 2rem; font-style: italic; opacity: .8; }
 
@@ -120,7 +121,7 @@
 
 <script>
 // ---- The only two things you need to edit -------------------------------
-const START = '2025-02-14';   // the day you got together, as YYYY-MM-DD
+const START = '2026-07-03';   // the day you got together, as YYYY-MM-DD
 const HEARTS = 170;           // how many hearts make up the tree
 // --------------------------------------------------------------------------
 
@@ -203,7 +204,8 @@ const now = () => new Date(Math.max(Date.now(), start));
 function tick() {
   const t = now(), gap = together(start, t);
   const cells = [[gap.years, 'year'], [gap.months, 'month'], [gap.days, 'day'],
-                 [t.getHours(), 'hour'], [t.getMinutes(), 'minute'], [t.getSeconds(), 'second']];
+                 [t.getHours(), 'hour'], [t.getMinutes(), 'minute'], [t.getSeconds(), 'second']]
+                .filter(([value, unit]) => unit !== 'year' || value);   // no "0 years" before the first anniversary
   $('counter').innerHTML = cells.map(([value, unit]) => `<div><b>${value}</b>${unit}${value === 1 ? '' : 's'}</div>`).join('');
 }
 
