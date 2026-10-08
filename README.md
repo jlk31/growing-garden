@@ -48,7 +48,7 @@ No dependencies or build tools are needed.
 Open `index.html` and edit the two values at the top of the `<script>` block:
 
 ```js
-const START = '2025-02-14';   // the day you got together, as YYYY-MM-DD
+const START = '2026-07-03';   // the day you got together, as YYYY-MM-DD
 const HEARTS = 170;           // how many hearts make up the tree
 ```
 
