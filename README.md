@@ -1,33 +1,36 @@
 # Growing Garden
 
-A single-page website that grows over time: one new flower appears for every week of a relationship, and a tree made of animated hearts stands beside a live counter of how long the couple have been together.
+An interactive one-page gift: a single tap grows a tree whose leaves are hearts, a flower blooms beneath it for every week of the relationship, and a live counter and handwritten-style letter sit beside it.
 
 **Live site:** https://jlk31.github.io/growing-garden/
 
 ## Brief Description
 
-Growing Garden is a personal gift built as a web page instead of a card. The top of the page is a garden that gains a flower each week. Scrolling down moves the sky from daytime to night and reveals a heart-shaped tree, with a counter showing the years, months, days, hours, minutes and seconds since the relationship began.
+Growing Garden is a personal gift built as a web page instead of a card. It opens on a single pulsing heart. Tapping it plays a short animated sequence: "I love you" appears, a seed falls to the ground, a trunk rises and branches out, and around 240 hearts blossom into a heart-shaped canopy. A counter then shows exactly how long the couple have been together, and a "Letter" button opens a note that types itself out.
 
-The whole project is one HTML file with no build step, no frameworks and no external requests. It was kept that small on purpose: it loads instantly on a phone, works offline once opened, and can be hosted for free on GitHub Pages.
+The whole project is one HTML file with no build step, no frameworks and no external requests. It loads instantly on a phone, and is hosted for free on GitHub Pages.
 
 ## Tech Stack
 
 | Area | Choice | Why |
 |---|---|---|
-| Structure | HTML5 | One file, readable top to bottom |
-| Styling and animation | CSS (flexbox, grid, keyframes) | Animations run in the browser's own engine, so no animation library is needed |
-| Graphics | Inline SVG | Flowers and hearts stay sharp at any screen size and are drawn once, then reused |
-| Logic | Vanilla JavaScript | Under 100 lines; a framework would add weight without adding anything |
+| Structure | HTML5, including the native `<dialog>` element | The letter pop-up gets focus handling, the Escape key and a dimmed backdrop from the browser, with no modal library |
+| Styling and animation | CSS keyframes | The entire intro sequence is timed in CSS; JavaScript only starts it with one class |
+| Graphics | Inline SVG | Hearts, flowers and the tree stay sharp at any screen size and are drawn once, then reused |
+| Logic | Vanilla JavaScript | Under 150 lines; a framework would add weight without adding anything |
 | Hosting | GitHub Pages | Free static hosting straight from this repository |
 
 ## Features
 
-- **A garden that grows.** The number of flowers is calculated from the start date, so a new one appears each week without the page ever being edited.
-- **A stable garden.** Flower shapes, colours and sizes come from a seeded random number generator, so the garden looks the same on every visit and only ever gains flowers.
-- **A heart tree.** 170 hearts in seven colours are placed inside a mathematical heart curve, so the canopy is itself heart-shaped. Each heart pulses at its own speed.
-- **A live counter.** Years, months and days are calculated on the calendar (accounting for month lengths, leap years and clock changes), and the clock ticks every second.
-- **Phone and laptop layouts.** The tree and counter sit side by side on wide screens and stack on narrow ones.
-- **Accessibility.** Animations switch off for visitors who have asked their device to reduce motion, and the graphics carry text descriptions for screen readers.
+- **Tap-to-start intro.** The page waits on a single heart so the animation plays when she is ready, not while the page is still loading.
+- **A growing tree.** The trunk rises, branches draw themselves on, and hearts pop in from the middle of the tree outwards.
+- **A heart-shaped canopy.** Hearts are placed inside a mathematical heart curve, so the canopy itself forms a heart.
+- **A meadow that grows over time.** One flower is planted along the ground for every week together. Flower positions are seeded, so existing flowers never move when a new one appears.
+- **A live counter.** Days, hours, minutes and seconds since the start date, ticking every second.
+- **A self-typing letter.** The letter types itself out the first time it is opened, then stays fully written if she closes and reopens it.
+- **Falling petals.** Hearts drift slowly down from the tree once it has grown.
+- **Phone and laptop layouts.** On a phone the counter sits above the tree; on a wide screen the tree slides right and the counter sits beside it.
+- **Accessibility.** Visitors whose device is set to reduce motion skip straight to the finished scene, and the graphics carry text descriptions for screen readers.
 - **Private by default.** The page asks search engines not to index it and contains no names or photos.
 
 ## Installation Steps
@@ -43,16 +46,18 @@ No dependencies or build tools are needed.
 
 ## Usage Examples
 
-### Set your own date
+### Set the date and write the letter
 
 Open `index.html` and edit the two values at the top of the `<script>` block:
 
 ```js
 const START = '2026-07-03';   // the day you got together, as YYYY-MM-DD
-const HEARTS = 170;           // how many hearts make up the tree
+const LETTER = `Hi, my love...
+
+...`;
 ```
 
-The headings and the short messages are plain text in the HTML and can be changed in the same file.
+Line breaks inside `LETTER` appear in the letter exactly as written.
 
 ### Publish it with GitHub Pages
 
@@ -63,7 +68,7 @@ The headings and the short messages are plain text in the HTML and can be change
 
 ### Run the self-check
 
-The date calculation has a built-in check covering anniversaries, month ends, leap days and clock changes. Open the page with `#test` on the end of the address and look at the browser console:
+The day count has a built-in check covering clock changes and leap years. Open the page with `#test` on the end of the address and look at the browser console:
 
 ```
 index.html#test
@@ -75,16 +80,17 @@ index.html#test
 
 | Part | Approach |
 |---|---|
-| Flower count | Total days together, divided by seven, plus one for the flower planted on day one |
-| Heart canopy | Random points are generated and kept only if they fall inside the heart curve `(x² + y² − 1)³ − x²y³ ≤ 0` |
-| Calendar gap | Steps forward in whole months from the start date, then counts the leftover days, so "1 month" is always a calendar month |
+| Intro sequence | Every step has a fixed CSS delay and waits for a `go` class on the page; tapping the heart adds that class |
+| Heart canopy | Random points are generated and kept only if they fall inside the heart curve `(x² + y² − 1)³ − x²y³ ≤ 0`, then sorted by distance from the centre so the tree blossoms outwards |
+| Same tree every visit | A seeded random number generator (mulberry32) replaces `Math.random()` for the tree and meadow |
+| Day count | Whole calendar days between midnight on the start date and today, rounded so the 23- and 25-hour days around clock changes do not skew it |
 
 ## Future Roadmap
 
-- A short message attached to individual flowers, shown when one is tapped.
+- A photo carousel inside the letter.
+- Optional background music with a play/pause button.
+- A custom domain.
 - Special flowers on anniversaries and birthdays.
-- Hearts that occasionally drift down from the tree.
-- An "add to home screen" icon so the page opens like an app on a phone.
 
 ## Licence
 
